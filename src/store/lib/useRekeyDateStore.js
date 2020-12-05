@@ -36,14 +36,18 @@ export default function useRekeyDateStore() {
 
       //TODO tighter search?
       //TODO maybe move into azimuth-js?
-      const logs = await _contracts.azimuth.getPastEvents('ChangedKeys', {
-        fromBlock: 0,
-        toBlock: 'latest',
-        filter: {
-          point: [point],
+      const logs = await _contracts.azimuth.queryFilter(
+        {
+          address: _contracts.azimuth.address,
+          topics: _contracts.azimuth.interface.encodeFilterTopics(
+            'ChangedKeys',
+            [point]
+          ),
         },
-      });
-
+        0,
+        'latest'
+      );
+      
       // NB(shrugs) using try-catch here to simplify our error handling
       try {
         if (logs.length === 0) {

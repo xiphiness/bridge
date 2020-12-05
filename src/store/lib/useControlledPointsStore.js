@@ -23,6 +23,7 @@ export default function useControlledPointsStore() {
     const address = _wallet.address;
 
     try {
+
       const [
         ownedPoints,
         incomingPoints,
@@ -35,8 +36,7 @@ export default function useControlledPointsStore() {
         azimuth.azimuth.getManagerFor(_contracts, address),
         azimuth.azimuth.getVotingFor(_contracts, address),
         azimuth.azimuth.getSpawningFor(_contracts, address),
-      ]);
-
+      ])
       _setControlledPoints(
         Just(
           Result.Ok({

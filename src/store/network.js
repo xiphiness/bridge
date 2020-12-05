@@ -25,7 +25,6 @@ function _useNetwork(initialNetworkType = null) {
     (async () => {
       if (window.ethereum) {
         try {
-          await window.ethereum.enable();
           setMetamask(true);
           setNetworkType(chainIdToNetworkType(window.ethereum.chainId));
         } catch (e) {
@@ -49,7 +48,6 @@ function _useNetwork(initialNetworkType = null) {
         contracts: Just(contracts),
       };
     };
-
     switch (networkType) {
       case NETWORK_TYPES.LOCAL: {
         const protocol = isDevelopment ? 'ws' : 'wss';

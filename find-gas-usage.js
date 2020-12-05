@@ -64,15 +64,19 @@ const LENT = 64 * ARGS + FUNC.length;
 
 const Web3 = require('web3');
 const azimuth = require('azimuth-js');
-
+// TODO: Fix ethers later (use @ethersproject/web & rpc call manually)
+const { JsonRpcProvider } = require('@ethersproject/providers')
 (async () => {
   const web3 = new Web3(new Web3.providers.HttpProvider(ENDPOINT));
-  const contracts = await azimuth.initContractsPartial(web3, AZIMUTH_ADDRESS);
-
-  const keyEvents = await contracts.azimuth.getPastEvents(VENT, {
-    fromBlock: FROM,
-    toBlock: TO,
-  });
+  const contracts = await azimuth.initContractsPartial(new JsonRpcProvider(ENDPOINT), AZIMUTH_ADDRESS);
+  const keyEvents = await contracts.azimuth.queryFilter(
+    {
+      address: contracts.azimuth.address,
+      topics: contracts.azimuth.interface.encodeFilterTopics(VENT,[]),
+    },
+    FROM,
+    TO
+  );
 
   const txsBatch = new web3.BatchRequest();
   keyEvents.map(vent => {
